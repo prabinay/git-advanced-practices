@@ -1,0 +1,17 @@
+1. Rebasing Multiple Branches
+Man, we have a lot of branches going on here! Let's rebase all the work from these branches onto main.
+
+Upper management is making this a bit trickier though -- they want the commits to all be in sequential order. So this means that our final tree should have C7' at the bottom, C6' above that, and so on, all in order.
+
+If you mess up along the way, feel free to use reset to start over again. Be sure to check out our solution and see if you can do it in fewer commands
+
+2. Specifying Parents
+Like the ~ modifier, the ^ modifier also accepts an optional number after it.
+
+Rather than specifying the number of generations to go back (what ~ takes), the modifier on ^ specifies which parent reference to follow from a merge commit. Remember that merge commits have multiple parents, so the path to choose is ambiguous.
+
+Git will normally follow the "first" parent upwards from a merge commit, but specifying a number with ^ changes this default behavior.
+
+Enough talking, let's see it in action.
+
+
