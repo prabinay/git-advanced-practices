@@ -1,0 +1,38 @@
+1. Moving Work Around
+So far we've covered the basics of git -- committing, branching, and moving around in the source tree. Just these concepts are enough to leverage 90% of the power of git repositories and cover the main needs of developers.
+
+That remaining 10%, however, can be quite useful during complex workflows (or when you've gotten yourself into a bind). The next concept we're going to cover is "moving work around" -- in other words, it's a way for developers to say "I want this work here and that work there" in precise, eloquent, flexible ways.
+
+This may seem like a lot, but it's a simple concept.
+
+Git Cherry-pick
+The first command in this series is called git cherry-pick. It takes on the following form:
+
+git cherry-pick <Commit1> <Commit2> <...>
+It's a very straightforward way of saying that you would like to copy a series of commits below your current location (HEAD). I personally love cherry-pick because there is very little magic involved and it's easy to understand.
+
+Let's see a demo!
+git cherry-pick <commit1> <commit2> ....
+
+2. Git Interactive Rebase
+Git cherry-pick is great when you know which commits you want (and you know their corresponding hashes) -- it's hard to beat the simplicity it provides.
+
+But what about the situation where you don't know what commits you want? Thankfully git has you covered there as well! We can use interactive rebasing for this -- it's the best way to review a series of commits you're about to rebase.
+
+Let's dive into the details...
+
+
+All interactive rebase means Git is using the rebase command with the -i option.
+
+If you include this option, git will open up a UI to show you which commits are about to be copied below the target of the rebase. It also shows their commit hashes and messages, which is great for getting a bearing on what's what.
+
+For "real" git, the UI window means opening up a file in a text editor like vim. For our purposes, I've built a small dialog window that behaves the same way.
+When the interactive rebase dialog opens, you have the ability to do two things in our educational application:
+
+You can reorder commits simply by changing their order in the UI (via dragging and dropping with the mouse).
+You can choose to keep all commits or drop specific ones. When the dialog opens, each commit is set to be included by the pick button next to it being active. To drop a commit, toggle off its pick button.
+It is worth mentioning that in the real git interactive rebase you can do many more things like squashing (combining) commits, amending commit messages, and even editing the commits themselves. For our purposes though we will focus on these two operations above.
+
+Great! Let's see an example.
+git rebase -i HEAD~4
+
