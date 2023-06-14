@@ -14,4 +14,70 @@ Git will normally follow the "first" parent upwards from a merge commit, but spe
 
 Enough talking, let's see it in action.
 
+git rebase <dest-branch-name> <branch-name>
+solution:
+$ git rebase main bugFix
+$ git checkout main
+$ git rebase bugFix side
+$ git rebase side another
+$ git checkout main
+$ git branch -f main c7'
+
+
+2. 
+Specifying Parents
+Like the ~ modifier, the ^ modifier also accepts an optional number after it.
+
+Rather than specifying the number of generations to go back (what ~ takes), the modifier on ^ specifies which parent reference to follow from a merge commit. Remember that merge commits have multiple parents, so the path to choose is ambiguous.
+
+Git will normally follow the "first" parent upwards from a merge commit, but specifying a number with ^ changes this default behavior.
+
+Enough talking, let's see it in action
+git checkout main^
+Here we have a merge commit. If we checkout main^ without the modifier, we will follow the first parent after the merge commit.
+
+git checkout main^2
+We followed the other parent upwards
+
+git checkout HEAD~; git checkout HEAD^2;git checkout HEAD~2;
+The ^ and ~ modifiers can make moving around a commit tree very powerful:
+
+Even crazier, these modifiers can be chained together! Check this out:
+git checkout HEAD~^2~2
+The same movement as before, but all in one command.
+solution:
+$ git checkout HEAD^
+$ git checkout HEAD^2
+$ git checkout HEAD^
+$ git branch bugWork
+$ git checkout bugWork
+$ git checkout main
+
+
+3. Branch Spaghetti
+WOAHHHhhh Nelly! We have quite the goal to reach in this level.
+
+Here we have main that is a few commits ahead of branches one two and three. For whatever reason, we need to update these three other branches with modified versions of the last few commits on main.
+
+Branch one needs a re-ordering of those commits and an exclusion/drop of C5. Branch two just needs a pure reordering of the commits, and three only needs one commit transferred!
+
+We will let you figure out how to solve this one -- make sure to check out our solution afterwards with show solution.
+solution:
+$ git checkout HEAD^
+$ git checkout HEAD^
+$ git checkout HEAD^
+$ git checkout HEAD^
+$ git cherry-pick c5
+$ git checkout main
+$ git checkout HEAD^
+$ git rebase -i HEAD~3
+$ git checkout one
+$ git branch -f one c2'
+$ git checkout three
+$ git checkout two
+$ git branch -f two c5'
+$ git cherry-pick c4' c3' c2'
+$ git checkout three
+$ git branch -f three c2
+
 
