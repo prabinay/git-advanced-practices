@@ -63,6 +63,13 @@ Branch one needs a re-ordering of those commits and an exclusion/drop of C5. Bra
 
 We will let you figure out how to solve this one -- make sure to check out our solution afterwards with show solution.
 solution:
+
+Switch to branch one:
+Perform an interactive rebase to reorder the commits and exclude commit C5. Start the rebase with the commit before C5:
+In the interactive rebase, you will see a list of commits. Rearrange the commits to the desired order, and remove the line corresponding to commit C5. Save and exit the file.
+
+Resolve any conflicts that may arise during the rebase process. Follow the conflict resolution steps mentioned earlier if needed.
+
 $ git checkout HEAD^
 $ git checkout HEAD^
 $ git checkout HEAD^
