@@ -40,6 +40,8 @@ To ensure that a new feature is working correctly and that the quality of the co
 
 Only if the code passes this process it can be merged to the main branch. The code in this branch is then deployed to production.
 
-The review process ensures that the code in the main branch is always working and can be deployed. This comes in handy e.g. when a critical bug pops up in production. The developers can now quickly fix the bug in the main branch and deplo
+The review process ensures that the code in the main branch is always working and can be deployed. This comes in handy e.g. when a critical bug pops up in production. The developers can now quickly fix the bug in the main branch and deploy the app without the risk of introducing new bugs caused by untested code.
+
+
 
 
