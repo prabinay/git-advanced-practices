@@ -1,0 +1,45 @@
+Trunk-Based Development in a nutshell
+There are many different Git workflows. So why should you learn Trunk-Based Development in this course?
+
+Trunk-Based Development is widespread yet lightweight. That makes it very useful when you start your career. At the same time, it's relatively easy to comprehend.
+
+To give you a quick overview here is what Trunk-Based Development looks like in a nutshell:
+
+You create a new branch.
+You write and commit your code.
+You push the commits to the remote repo on GitHub.
+You open a Pull Request (PR).
+You wait for the Continuous Integration pipelines to pass.
+You request a review from other developers and discuss the code.
+Once the PR is approved you merge it to the main branch.
+No worries if some steps don't make sense yet. Once you're through the first round it'll clear up. We'll get our hands dirty in a bit.
+
+
+We can use the -b option to create and check out a branch at the same time. Since this will be the first move of the first game let's use the name move-1-1.
+
+git checkout -b move-1-1
+
+we stage the changes. In this case, we can simply stage all files.
+
+git add .
+Just to be safe let's double-check the staged files by running the command
+
+git statusFinally, let's commit and push the changes to the remote repository on GitHub.
+
+git commit -m "Clear A8"
+git push origin move-1-1
+
+Finally, let's commit and push the changes to the remote repository on GitHub.
+
+git commit -m "Clear A8"
+git push origin move-1-1
+Theory Time: Why you can't push directly to main
+You might be used to working directly on the main branch. And that's totally fine for small side projects. But in real-world developer teams, you're usually not allowed to do that. Here is why:
+
+To ensure that a new feature is working correctly and that the quality of the code is high, every change in the codebase has to go through a review process. Other developers look at the code and run it locally. In bigger teams, a dedicated quality assurance (QA) person might test the implementation.
+
+Only if the code passes this process it can be merged to the main branch. The code in this branch is then deployed to production.
+
+The review process ensures that the code in the main branch is always working and can be deployed. This comes in handy e.g. when a critical bug pops up in production. The developers can now quickly fix the bug in the main branch and deplo
+
+
