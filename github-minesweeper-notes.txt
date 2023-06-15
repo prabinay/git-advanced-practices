@@ -42,6 +42,258 @@ Only if the code passes this process it can be merged to the main branch. The co
 
 The review process ensures that the code in the main branch is always working and can be deployed. This comes in handy e.g. when a critical bug pops up in production. The developers can now quickly fix the bug in the main branch and deploy the app without the risk of introducing new bugs caused by untested code.
 
+Create a Pull Request on GitHub
+The first option is to click the link in the output of the git push command
+The second option is to open the repository on GitHub. You'll see a button to create a PR if you pushed any branches recently.
+
+Once you click either the link or the button, you should see a form to create the PR.
+
+For branches with a single commit, the PR title is prefilled with the commit message. For branches with more commits, the title is created using the name of the branch.
+Note: In a real team you should use a concise yet descriptive title and mention all relevant details about the feature or bug fix in the description. You might add screenshots as well. Well-documented PRs go a long way with your teammates since it'll be easier for them to understand the code changes.
+Theory Time: What the heck is a Pull Request?
+To be honest, the name "Pull Request" on GitHub is a bit confusing. In my opinion, GitLab uses a better name:
+
+Merge Request
+
+That explains it well: With a "Merge Request" you request your branch to be merged with the main branch (or any other branch). And with a Pull Request on GitHub you do exactly the same.
+
+So by creating a PR you basically reach out to your team and say:
+
+Hey folks, I wrote a bunch of code. I want to merge it so our users can benefit from it. Could you have a look and tell me if the code looks ok?
+
+Your teammates then read the description of the PR, investigate all the code changes, and add comments whenever they have questions or think that something should be improved.
+
+So you can think of a Pull Request as a layer on top of a Git branch. A PR extends a branch with additional functionality such as
+
+a description to explain the context and the code changes
+a place to discuss and comment the code
+a mechanism to ensure that only reviewed code can be merged.
+This way a team can decrease the risk of introducing bugs and increase overall code quality and consistency.
+
+Request a Review
+We created our first PR but can't merge it yet. We still need at least one approval from another developer.
+
+We don't have a real developer at our disposal but our bot teammate Tara will help us out. Either select her from the suggested reviewers or click the gear icon to open the dropdown menu.
+
+To send the review request you have to click outside the dropdown menu.
+
+Merge the Pull Request
+We created our first PR and got it approved. Now it's time to merge it to the main branch.
+
+At the bottom of the page, you can see that the "Squash and merge" button turned green.
+You might wonder why the button says "Squash and merge" and not only "Merge". We'll see what that means later.
+
+For now, go ahead and click the button.
+
+You should see a form that asks for a title and a description. The title is again prefilled with the commit message (similar to the PR title). I again replace it with "Move 1".
+\The text "#1" is the number of the Pull Request and will turn into a link in the commit history as we'll see in a bit.
+To clean up you can delete the branch now. The good thing: you can recover it again. In theory, this should be possible indefinitely.
+What just happened? A look at the commit history
+To get a better understanding of what just happened let's have a quick look at the commit history of the main branch.
+
+To open it navigate back to the main page of the repository
+Then click on the commits.
+Now you can see the list of all commits on the main branch.
+Note that the title we entered when we created the PR became the commit message Move 1 (#1).
+
+As promised, the #1 turned into a link to the Pull Request. This comes in very handy when you have to investigate the commit history of a larger project e.g. while tracking down a bug. Once you find the responsible commit you can look at the PR to understand the larger context. Assuming that the PR has a good description of course.
+
+Syncing the local main branch
+We can see two commits as expected. But this is the remote repository on GitHub. What does the commit history on our local machine look like?
+
+Let's see. Head back to your terminal and run
+ Head back to your terminal and run
+
+git checkout main
+To get an overview of the commit history we can run the git log command. I like the oneline option because it gives a more concise overview of the commits.
+
+git log --oneline
+
+If you ever see a : in the last line (see screenshot below) and don't know what to do anymore: You just opened the VIM editor. You can hit the return key to show the next line or q to exit the editor.
+
+Interesting. Unlike on GitHub we only see the initial commit on our machine.
+
+But that makes sense. We clicked the "Merge" button on GitHub. So our local repository is not yet aware of the second commit on the main branch. We need to sync the repositories first.
+
+To sync our local branch with the remote repository we use the git pull command. Note that it's important that we're on the main branch.
+
+git pull origin main
+Alternatively, you can use the short-hand command git pull. The difference is that this will pull all the tracked branches instead of only main.
+
+In any case, you should see this in your terminal:
+
+git pull main
+
+If you see a yellow hint about "Pulling without specifying how to reconcile divergent branches" you can simply use one of the suggested commands to get rid of it the next time (e.g. git config pull.rebase false).
+
+Let's look at the commit history again to verify that everything worked fine.
+
+git log --oneline
+
+Adding the second move
+For the second move, we again need to create a new branch from the main branch.
+
+git checkout -b move-1-2
+
+Now commit the file changes. Instead of using the git add . command to stage the file before committing we can commit it directly with the --all or -a option.
+
+git commit -a -m "Flag fields with mines"
+
+You can already push the commit to GitHub if you like. In real-world projects with larger feature PRs you would push from time to time just to backup your code. You might also ask your teammates for early feedback with a "Draft PR" just to make sure you're heading in the right direction. This can be very valuable especially for Junior devs.
+Now let's clear the next field. We'll simply add the next line to commands.json and commit it again.
+
+Note: The file content below is invalid. That's on purpose. It's important that you copy & paste the exact content to your repo.
+Next, commit and push the changes.
+
+git commit -a -m "Clear H9"
+git push origin move-1-2
+Note: The link to create a PR in the output of the git push command only appears when you push the branch for the first time. If you don't see it you can create PR in the GitHub UI.
+Finally, create the PR on GitHub. 
+
+
+Here are the steps you need to open a PR:
+
+open the repository on GitHub
+click the "Compare & pull request" button (see screenshot below)
+enter the title "Move 2"
+enter a description
+click the "Create pull request" button
+
+Continuous Integration pipeline
+By now you opened the PR for our second move. After waiting for a short while you should see this:
+What a happy message: "All checks have failed." But what does that mean exactly? This is the Continuous Integration pipeline in action.
+
+Let's have a closer look and click on the "Details" link.
+You should now see the logs of the CI scripts.
+The error message states The commands.json file contains a syntax error: Unexpected token in JSON.
+
+So the JSON in commands.json is invalid. My editor actually told me so from the beginning.
+Commit and push again.
+
+git commit -a -m "Fix JSON format"
+git push origin move-1-2
+Great. Now the CI scripts will run again. Let's head back to GitHub and see what we get.
+
+Note: you have to go back to the Pull Request's main page e.g. via the "Conversation" tab. You may need to refresh that page to see the updated CI checks.
+
+Damn, the checks failed again. Correct file structure
+
+
+Detour: GitHub Actions and CI
+On the last page, we saw the Continuous Integration pipeline (or short CI pipeline) in action. We pushed invalid code to the remote repository on GitHub. That caused the CI pipeline to fail. And that again prevented us from merging a broken JSON file and a non-existent field.
+
+In a real-world project, CI pipelines work pretty much the same. They run automated tests, type checks, a linter, or other tools like Prettier. This helps to keep the codebase consistent and prevents bugs.
+
+To clarify, let's paint a realistic scenario
+Imagine you're working on a new feature for a large application. You write the code, commit and push it to GitHub. Then you open a PR and request a review from your teammates. Exactly as we did here. Your teammates review the code and test the feature.
+
+Everything seems to work. So they approve the PR.
+
+But of course, their time is limited. They can't test every feature in the whole application. So they miss something important. To build the new feature you had to adjust a piece of code that is used in different places of the app. And unfortunately, you broke it.
+
+Without a CI pipeline, you could just go ahead and merge the PR. You would introduce a bug into seemingly unrelated features. This bug would end up in the production application which is used by real users. That can be costly.
+
+With a CI pipeline that runs automated tests, this bug can easily be prevented. The pipeline fails and you can't merge the PR. Even if your teammates think the code works.
+
+Great. But how does our CI pipeline work?
+Our project uses a native GitHub feature called GitHub Actions. With GitHub Actions, we can run scripts and code in a virtual machine within GitHub. The same scripts that we can also run in the terminal on our local machine (e.g. npm start).
+
+The actions are defined in the file .github/workflows/main.yml in the repository. You can check it in your editor.
+
+
+
+Only one step left: At this point, the "Merge" button is still disabled because we need to get a review.
+
+Finally, merge the PR and we're done with our second move.
+
+
+Squash & Merge
+I kept you wondering about the "Squash and merge" button for a while now. Finally, it's time to reveal the secret: What's the difference between a "normal" merge and a squash merge?
+
+First, let's quickly remember what we did on the previous pages: We created a PR with 4 commits in total. This is the commit history of the PR on GitHub:
+With a "normal" merge (also called fast-forward merge) all of these commits would end up in the main branch.
+
+Note that commits like "Fix JSON format" or "Rename field H9 to H8" don't add a lot of value but just fix small problems that were introduced within the PR. In real-world teams, you can often see similar commits like "Address review comments" or "Fix tests".
+
+The question is: Do we really want all these commits on the main branch?
+
+Commits like these are irrelevant outside the PR and would just add clutter to the history of the main branch. The history would become hard to read and understand.
+
+That's where the "squash and merge" button comes into play. Let's see how that improves the readability of our main branch. Since we already squash merged the "Move 2" PR we can simply look at the history of the main branch on GitHub to see what happened.
+
+Instead of the 4 commits that we saw in the PR we only have one new commit "Move 2 (#2)" on the main branch. The commits from the move-1-2 branch have been combined (or squashed) into a single commit on main.
+
+So by using squash merge the history of the main branch contains only one commit per PR. That makes the history of the main branch much more readable and easy to understand in the long run. And since the commit on the main branch links directly to the PR we don't even lose all the details and context.
+
+Two quick notes:
+
+Squash merging is not a requirement in Trunk-Based Development. It's just my experience, that many companies use it nowadays.
+There is another advantage to squash merging: The history of the main branch stays "linear". It would require a deeper dive into Git to correctly explain this. If you're interested have a look at the link in the "Further Reading" section below.
+
+In this chapter, you will learn how the review process looks from the other side. This time you'll review a PR.
+Before we edit the commands file remember to sync our local repository with the remote one.
+These are the Git commands you need to run on your local machine to sync the main branch:
+
+git checkout main
+git pull origin main
+git log --oneline
+The last line isn't really necessary. But why not double-check that everything looks fine?!
+
+Now it's time for the final move. Try the next steps for yourself.
+
+create and checkout a new branch called move-1-3
+add command "clear H7" to the array in the file commands.json
+commit and push the changes
+open a PR on GitHub
+wait for the CI checks to finish and request a review.
+
+These are the Git commands you need:
+
+Create and check out the new branch: git checkout -b move-1-3
+Commit the file changes: git commit -a -m "Clear H7"
+Push the changes: git push origin move-1-3
+
+But before we get there, let's close this PR to keep the repository tidy.
+Again, you can delete the branch since it's not needed anymore.
+
+Now it's time for you to become the reviewer.
+
+Review & Approve a PR
+Let's have a look at that PR. First, navigate to the Pull Request list.
+Now open the PR.
+As you can see at the bottom, all checks passed. But we can't merge the PR yet because it's missing an approving review.
+This time the review is our responsibility.
+Go ahead and open the "Files changed" tab.
+Now you should see a list of all the code changes.
+In a real project, you would thoroughly review the code. You would step through each file and add comments to the code where you think an improvement was required. Ideally, you'd check out the code on your local machine, run, and test it.
+
+To add comments you hover a line in one of the files. You'll see a "+" sign as you can see in the screenshot. Go ahead and give it a try.
+If you want to publish the comment directly you can click on the "Add single comment" button. The author of the PR is notified right away. This makes sense if you only have minor remarks.
+
+If you use the "Start a review" button the comment is not published directly but marked as "pending". You can add more comments and publish them together once you finish the review process. This is very handy when you have to review multiple files. Here an example:
+
+Imagine you go through a long list of code changes. You might not understand a part of the code immediately so you add a comment asking for clarification. You then continue reading the other code changes and suddenly you get the bigger context. Now you can go back and edit or delete the comment without the author of the PR being notified.
+
+So go ahead and click the "Start a review" button. You should see your comment embedded in the code now as shown in the screenshot below.
+
+Finally, click on the "Finish your review" button.
+We don't need to request changes but can directly approve the PR. You can enter a nice message if you want to make Tara happy. Then select the "Approve" option and click the button.
+You should then be redirected to the bottom of the PR page.
+Merge the PR as usual
+
+This is the end of the guided part of this course. We covered in more or less detail
+
+The Trunk-Based Development Git workflow
+Working with a team on a remote repository
+Squash merging
+Continuous Integration and GitHub Actions
+The review process from the reviewer's perspecti
+
+
+
+
+
+
 
 
 
